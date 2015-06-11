@@ -30,6 +30,7 @@ use yii\bootstrap\ActiveForm;
         [
             'plugins' => ['fullscreen', 'fontcolor', 'video'],
             'options' => [
+                'lang' => 'zh_cn',
                 'minHeight' => 400,
                 'maxHeight' => 400,
                 'buttonSource' => true,
@@ -63,7 +64,10 @@ use yii\bootstrap\ActiveForm;
     <?php echo $form->field($model, 'published_at')->widget(
         'trntv\yii\datetimepicker\DatetimepickerWidget',
         [
-            'phpDatetimeFormat' => 'yyyy-MM-dd\'T\'HH:mm:ssZZZZZ'
+            'phpDatetimeFormat' => 'yyyy-MM-dd\'T\'HH:mm:ssZZZZZ',
+            'clientOptions' => [
+                'locale'=>'zh_CN',
+            ]
         ]
     ) ?>
 

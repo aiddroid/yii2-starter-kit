@@ -1,5 +1,6 @@
 <?php
 // Path aliases
+//Yii::setAlias('@app', realpath(__DIR__.'/../../'));
 Yii::setAlias('@base', realpath(__DIR__.'/../../'));
 Yii::setAlias('@common', realpath(__DIR__.'/../../common'));
 Yii::setAlias('@frontend', realpath(__DIR__.'/../../frontend'));

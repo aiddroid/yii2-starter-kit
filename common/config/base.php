@@ -4,7 +4,7 @@ $config = [
     'vendorPath'=>dirname(dirname(__DIR__)).'/vendor',
     'extensions' => require(__DIR__ . '/../../vendor/yiisoft/extensions.php'),
     'sourceLanguage'=>'en-US',
-    'language'=>'en-US',
+    'language'=>'zh-CN',
     'bootstrap' => ['log'],
     'components' => [
 
@@ -14,6 +14,12 @@ $config = [
             'itemChildTable' => '{{%rbac_auth_item_child}}',
             'assignmentTable' => '{{%rbac_auth_assignment}}',
             'ruleTable' => '{{%rbac_auth_rule}}'
+        ],
+        
+        'request' => [
+          'parsers' => [ // 因为模块中有使用angular.js  所以该设置是为正常解析angular提交post数据
+              'application/json' => 'yii\web\JsonParser'
+          ]
         ],
 
         'cache' => [
@@ -133,6 +139,13 @@ $config = [
             require(Yii::getAlias('@storage/config/_urlManager.php'))
         )
     ],
+                            
+    'modules'=>[
+        'wechat' => [ // 指定微信模块
+            'class' => 'callmez\wechat\Module',
+            'adminId' => 1 // 填写管理员ID, 该设置的用户将会拥有wechat最高权限, 如多个请填写数组 [1, 2]
+        ]
+    ],
     'params' => [
         'adminEmail' => getenv('ADMIN_EMAIL'),
         'robotEmail' => getenv('ROBOT_EMAIL'),
@@ -140,7 +153,8 @@ $config = [
             'en-US'=>'English (US)',
             'ru-RU'=>'Русский (РФ)',
             'uk-UA'=>'Українська (Україна)',
-            'es' => 'Español'
+            'es' => 'Español',
+            'zh-CN' => '中文'
         ],
     ],
 ];

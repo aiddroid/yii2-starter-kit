@@ -27,8 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
 
             'id',
+            [ 
+                'attribute' => 'title',
+                'format' => 'raw',
+                'value' => function($model) {
+                    return Html::a($model->title, Yii::getAlias('@frontendUrl')."/article/{$model->slug}", array('target'=>'_blank'));
+                }
+            ],
             'slug',
-            'title',
             [
                 'attribute'=>'category_id',
                 'value'=>function ($model) {
