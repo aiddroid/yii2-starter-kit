@@ -66,7 +66,7 @@ use yii\bootstrap\ActiveForm;
         [
             'phpDatetimeFormat' => 'yyyy-MM-dd\'T\'HH:mm:ssZZZZZ',
             'clientOptions' => [
-                'locale'=>'zh_CN',
+                'locale'=>'zh_cn',
             ]
         ]
     ) ?>
