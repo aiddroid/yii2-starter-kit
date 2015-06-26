@@ -54,7 +54,8 @@
     "bower-asset/flot": "~0.8",
     "callmez/yii2-wechat": "dev-master",
     "callmez/yii2-wechat-sdk": "dev-master",
-    "symfony/yaml": "*"
+    "symfony/yaml": "*",
+    "mdmsoft/yii2-admin": "dev-master"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.0",
