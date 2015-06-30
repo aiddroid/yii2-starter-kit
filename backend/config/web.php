@@ -44,6 +44,9 @@ $config = [
         ],
         'rbacAdmin' => [
             'class' => 'backend\modules\rbacAdmin\Module'
+        ],
+        'rbac' => [
+            'class' => 'githubjeka\rbac\Module'
         ]
     ],
     'as globalAccess'=>[

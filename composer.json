@@ -55,7 +55,8 @@
     "callmez/yii2-wechat": "dev-master",
     "callmez/yii2-wechat-sdk": "dev-master",
     "symfony/yaml": "*",
-    "mdmsoft/yii2-admin": "dev-master"
+    "mdmsoft/yii2-admin": "dev-master",
+    "githubjeka/yii2-gui-rbac": "*"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.0",
