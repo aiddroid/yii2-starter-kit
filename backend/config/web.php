@@ -37,6 +37,16 @@ $config = [
         'i18n' => [
             'class' => 'backend\modules\i18n\Module',
             'defaultRoute'=>'i18n-message/index'
+        ],
+        'adminRbac' => [
+            'class' => 'mdm\admin\Module',
+            'layout' => 'left-menu'
+        ],
+        'rbacAdmin' => [
+            'class' => 'backend\modules\rbacAdmin\Module'
+        ],
+        'rbac' => [
+            'class' => 'githubjeka\rbac\Module'
         ]
     ],
     'as globalAccess'=>[
