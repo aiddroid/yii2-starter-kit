@@ -16,14 +16,26 @@ $config = [
             'ruleTable' => '{{%rbac_auth_rule}}'
         ],
         
-        'request' => [
-          'parsers' => [ // 因为模块中有使用angular.js  所以该设置是为正常解析angular提交post数据
-              'application/json' => 'yii\web\JsonParser'
-          ]
-        ],
-
         'cache' => [
             'class' => 'yii\caching\DummyCache',
+        ],
+        
+        'mcache' => [
+            'class' => 'yii\caching\MemCache',
+            'useMemcached' => true,
+            'servers' => [
+                [
+                    'host' => '127.0.0.1',
+                    'port' => 11211,
+                    'weight' => 100
+                ]
+            ]
+        ],
+        
+        'xunsearch' => [
+            'class' => 'hightman\xunsearch\Connection', // 此行必须
+            'iniDirectory' => '/usr/local/xunsearch/sdk/php/app',    // 搜索 ini 文件目录，默认：@vendor/hightman/xunsearch/app
+            'charset' => 'utf-8',   // 指定项目使用的默认编码，默认即时 utf-8，可不指定
         ],
 
         'formatter'=>[

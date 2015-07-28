@@ -56,7 +56,9 @@
     "callmez/yii2-wechat-sdk": "dev-master",
     "symfony/yaml": "*",
     "mdmsoft/yii2-admin": "dev-master",
-    "githubjeka/yii2-gui-rbac": "*"
+    "githubjeka/yii2-gui-rbac": "*",
+    "aiddroid/yii2-tinymce": "^1.0",
+    "hightman/xunsearch": "1.4.9"
   },
   "require-dev": {
     "yiisoft/yii2-debug": "~2.0",
