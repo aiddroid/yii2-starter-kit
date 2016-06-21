@@ -1,5 +1,7 @@
 <?php
 
+use trntv\filekit\widget\Upload;
+use trntv\yii\datetime\DateTimeWidget;
 use yii\helpers\Html;
 use yii\bootstrap\ActiveForm;
 
@@ -13,11 +15,11 @@ use yii\bootstrap\ActiveForm;
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?php echo $form->field($model, 'title')->textInput(['maxlength' => 512]) ?>
+    <?php echo $form->field($model, 'title')->textInput(['maxlength' => true]) ?>
 
     <?php echo $form->field($model, 'slug')
         ->hint(Yii::t('backend', 'If you\'ll leave this field empty, slug will be generated automatically'))
-        ->textInput(['maxlength' => 1024]) ?>
+        ->textInput(['maxlength' => true]) ?>
 
     <?php echo $form->field($model, 'category_id')->dropDownList(\yii\helpers\ArrayHelper::map(
             $categories,
@@ -42,7 +44,7 @@ use yii\bootstrap\ActiveForm;
     ) ?>
 
     <?php echo $form->field($model, 'thumbnail')->widget(
-        \trntv\filekit\widget\Upload::className(),
+        Upload::className(),
         [
             'url' => ['/file-storage/upload'],
             'maxFileSize' => 5000000, // 5 MiB
@@ -50,7 +52,7 @@ use yii\bootstrap\ActiveForm;
     ?>
 
     <?php echo $form->field($model, 'attachments')->widget(
-        \trntv\filekit\widget\Upload::className(),
+        Upload::className(),
         [
             'url' => ['/file-storage/upload'],
             'sortable' => true,
@@ -59,10 +61,12 @@ use yii\bootstrap\ActiveForm;
         ]);
     ?>
 
+    <?php echo $form->field($model, 'view')->textInput(['maxlength' => true]) ?>
+
     <?php echo $form->field($model, 'status')->checkbox() ?>
 
     <?php echo $form->field($model, 'published_at')->widget(
-        'trntv\yii\datetimepicker\DatetimepickerWidget',
+        DateTimeWidget::className(),
         [
             'phpDatetimeFormat' => 'yyyy-MM-dd\'T\'HH:mm:ssZZZZZ',
             'clientOptions' => [

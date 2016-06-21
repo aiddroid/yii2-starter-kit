@@ -8,7 +8,7 @@ $this->title = Yii::t('backend', 'File Manager')
         <?php echo \mihaildev\elfinder\ElFinder::widget([
             'controller'       => 'file-manager-elfinder',
             'path' => Yii::getAlias('@backend').'/source/',
-            'frameOptions' => ['style'=>'min-height: 500px; width: 100%'],
+            'frameOptions' => ['style'=>'min-height: 500px; width: 100%; border: 0'],
             ]);
         ?>
     </div>

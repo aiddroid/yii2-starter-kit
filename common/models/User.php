@@ -1,7 +1,8 @@
 <?php
 namespace common\models;
 
-use cheatsheet\Time;
+use common\commands\AddToTimelineCommand;
+use common\models\query\UserQuery;
 use Yii;
 use yii\behaviors\AttributeBehavior;
 use yii\behaviors\TimestampBehavior;
@@ -15,21 +16,25 @@ use yii\web\IdentityInterface;
  * @property integer $id
  * @property string $username
  * @property string $password_hash
- * @property string $password_reset_token
  * @property string $email
  * @property string $auth_key
+ * @property string $access_token
+ * @property string $oauth_client
+ * @property string $oauth_client_user_id
  * @property string $publicIdentity
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  * @property integer $logged_at
  * @property string $password write-only password
+ *
  * @property \common\models\UserProfile $userProfile
  */
 class User extends ActiveRecord implements IdentityInterface
 {
-    const STATUS_DELETED = 0;
-    const STATUS_ACTIVE = 1;
+    const STATUS_NOT_ACTIVE = 1;
+    const STATUS_ACTIVE = 2;
+    const STATUS_DELETED = 3;
 
     const ROLE_USER = 'user';
     const ROLE_MANAGER = 'manager';
@@ -47,6 +52,14 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
+     * @return UserQuery
+     */
+    public static function find()
+    {
+        return new UserQuery(get_called_class());
+    }
+
+    /**
      * @inheritdoc
      */
     public function behaviors()
@@ -59,6 +72,15 @@ class User extends ActiveRecord implements IdentityInterface
                     ActiveRecord::EVENT_BEFORE_INSERT => 'auth_key'
                 ],
                 'value' => Yii::$app->getSecurity()->generateRandomString()
+            ],
+            'access_token' => [
+                'class' => AttributeBehavior::className(),
+                'attributes' => [
+                    ActiveRecord::EVENT_BEFORE_INSERT => 'access_token'
+                ],
+                'value' => function () {
+                    return Yii::$app->getSecurity()->generateRandomString(40);
+                }
             ]
         ];
     }
@@ -71,7 +93,7 @@ class User extends ActiveRecord implements IdentityInterface
         return ArrayHelper::merge(
             parent::scenarios(),
             [
-                'oauth_create'=>[
+                'oauth_create' => [
                     'oauth_client', 'oauth_client_user_id', 'email', 'username', '!status'
                 ]
             ]
@@ -86,8 +108,9 @@ class User extends ActiveRecord implements IdentityInterface
     {
         return [
             [['username', 'email'], 'unique'],
-            ['status', 'default', 'value' => self::STATUS_ACTIVE],
-            ['status', 'in', 'range' => [self::STATUS_ACTIVE, self::STATUS_DELETED]],
+            ['status', 'default', 'value' => self::STATUS_NOT_ACTIVE],
+            ['status', 'in', 'range' => array_keys(self::statuses())],
+            [['username'], 'filter', 'filter' => '\yii\helpers\Html::encode']
         ];
     }
 
@@ -100,6 +123,7 @@ class User extends ActiveRecord implements IdentityInterface
             'username' => Yii::t('common', 'Username'),
             'email' => Yii::t('common', 'E-mail'),
             'status' => Yii::t('common', 'Status'),
+            'access_token' => Yii::t('common', 'API access token'),
             'created_at' => Yii::t('common', 'Created at'),
             'updated_at' => Yii::t('common', 'Updated at'),
             'logged_at' => Yii::t('common', 'Last login'),
@@ -111,7 +135,7 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function getUserProfile()
     {
-        return $this->hasOne(UserProfile::className(), ['user_id'=>'id']);
+        return $this->hasOne(UserProfile::className(), ['user_id' => 'id']);
     }
 
     /**
@@ -119,7 +143,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentity($id)
     {
-        return static::findOne($id);
+        return static::find()
+            ->active()
+            ->andWhere(['id' => $id])
+            ->one();
     }
 
     /**
@@ -127,7 +154,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findIdentityByAccessToken($token, $type = null)
     {
-        return static::findOne(['auth_key' => $token, 'status' => self::STATUS_ACTIVE]);
+        return static::find()
+            ->active()
+            ->andWhere(['access_token' => $token, 'status' => self::STATUS_ACTIVE])
+            ->one();
     }
 
     /**
@@ -138,7 +168,10 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByUsername($username)
     {
-        return static::findOne(['username' => $username, 'status' => self::STATUS_ACTIVE]);
+        return static::find()
+            ->active()
+            ->andWhere(['username' => $username, 'status' => self::STATUS_ACTIVE])
+            ->one();
     }
 
     /**
@@ -149,33 +182,14 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public static function findByLogin($login)
     {
-        return static::findOne([
-            'and',
-            ['or', ['username' => $login], ['email' => $login]],
-            'status' => self::STATUS_ACTIVE
-        ]);
-    }
-
-    /**
-     * Finds user by password reset token
-     *
-     * @param string $token password reset token
-     * @return static|null
-     */
-    public static function findByPasswordResetToken($token)
-    {
-        $expire = Time::SECONDS_IN_A_DAY;
-        $parts = explode('_', $token);
-        $timestamp = (int) end($parts);
-        if ($timestamp + $expire < time()) {
-            // token expired
-            return null;
-        }
-
-        return static::findOne([
-            'password_reset_token' => $token,
-            'status' => self::STATUS_ACTIVE
-        ]);
+        return static::find()
+            ->active()
+            ->andWhere([
+                'and',
+                ['or', ['username' => $login], ['email' => $login]],
+                'status' => self::STATUS_ACTIVE
+            ])
+            ->one();
     }
 
     /**
@@ -224,33 +238,16 @@ class User extends ActiveRecord implements IdentityInterface
     }
 
     /**
-     * Generates new password reset token
-     */
-    public function generatePasswordResetToken()
-    {
-        $this->password_reset_token = Yii::$app->getSecurity()->generateRandomString() . '_' . time();
-    }
-
-    /**
-     * Removes password reset token
-     */
-    public function removePasswordResetToken()
-    {
-        $this->password_reset_token = null;
-    }
-
-    /**
      * Returns user statuses list
-     * @param mixed $status
      * @return array|mixed
      */
-    public static function getStatuses($status = false)
+    public static function statuses()
     {
-        $statuses = [
+        return [
+            self::STATUS_NOT_ACTIVE => Yii::t('common', 'Not Active'),
             self::STATUS_ACTIVE => Yii::t('common', 'Active'),
             self::STATUS_DELETED => Yii::t('common', 'Deleted')
         ];
-        return $status !== false ? ArrayHelper::getValue($statuses, $status) : $statuses;
     }
 
     /**
@@ -259,22 +256,23 @@ class User extends ActiveRecord implements IdentityInterface
      */
     public function afterSignup(array $profileData = [])
     {
-        TimelineEvent::log(
-            'user',
-            'signup',
-            [
-                'publicIdentity' => $this->getPublicIdentity(),
-                'userId' => $this->getId(),
+        $this->refresh();
+        Yii::$app->commandBus->handle(new AddToTimelineCommand([
+            'category' => 'user',
+            'event' => 'signup',
+            'data' => [
+                'public_identity' => $this->getPublicIdentity(),
+                'user_id' => $this->getId(),
                 'created_at' => $this->created_at
             ]
-        );
+        ]));
         $profile = new UserProfile();
         $profile->locale = Yii::$app->language;
         $profile->load($profileData, '');
         $this->link('userProfile', $profile);
         $this->trigger(self::EVENT_AFTER_SIGNUP);
         // Default role
-        $auth =  Yii::$app->authManager;
+        $auth = Yii::$app->authManager;
         $auth->assign($auth->getRole(User::ROLE_USER), $this->getId());
     }
 

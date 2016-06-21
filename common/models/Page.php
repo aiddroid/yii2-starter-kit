@@ -5,6 +5,7 @@ namespace common\models;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "page".
@@ -13,11 +14,12 @@ use yii\behaviors\TimestampBehavior;
  * @property string $slug
  * @property string $title
  * @property string $body
+ * @property string $view
  * @property integer $status
  * @property integer $created_at
  * @property integer $updated_at
  */
-class Page extends \yii\db\ActiveRecord
+class Page extends ActiveRecord
 {
     const STATUS_DRAFT = 0;
     const STATUS_PUBLISHED = 1;
@@ -37,11 +39,11 @@ class Page extends \yii\db\ActiveRecord
     {
         return [
             TimestampBehavior::className(),
-            'slug'=>[
-                'class'=>SluggableBehavior::className(),
-                'attribute'=>'title',
-                'ensureUnique'=>true,
-                'immutable'=>true
+            'slug' => [
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'title',
+                'ensureUnique' => true,
+                'immutable' => true
             ]
         ];
     }
@@ -57,7 +59,8 @@ class Page extends \yii\db\ActiveRecord
             [['status'], 'integer'],
             [['slug'], 'unique'],
             [['slug'], 'string', 'max' => 2048],
-            [['title'], 'string', 'max' => 512]
+            [['title'], 'string', 'max' => 512],
+            [['view'], 'string', 'max' => 255]
         ];
     }
 
@@ -71,7 +74,10 @@ class Page extends \yii\db\ActiveRecord
             'slug' => Yii::t('common', 'Slug'),
             'title' => Yii::t('common', 'Title'),
             'body' => Yii::t('common', 'Body'),
+            'view' => Yii::t('common', 'Page View'),
             'status' => Yii::t('common', 'Active'),
+            'created_at' => Yii::t('common', 'Created At'),
+            'updated_at' => Yii::t('common', 'Updated At'),
         ];
     }
 }

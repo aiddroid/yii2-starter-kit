@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%file_storage_item}}".
@@ -18,7 +19,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $upload_ip
  * @property integer $created_at
  */
-class FileStorageItem extends \yii\db\ActiveRecord
+class FileStorageItem extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -46,9 +47,9 @@ class FileStorageItem extends \yii\db\ActiveRecord
         return [
             [['component', 'path'], 'required'],
             [['size'], 'integer'],
-            [['component', 'name'], 'string', 'max' => 255],
-            [['path', 'base_url'], 'string', 'max' => 512],
-            [['type'], 'string', 'max' => 128],
+            [['component', 'name', 'type'], 'string', 'max' => 255],
+            [['path', 'base_url'], 'string', 'max' => 1024],
+            [['type'], 'string', 'max' => 45],
             [['upload_ip'], 'string', 'max' => 15]
         ];
     }

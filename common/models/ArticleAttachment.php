@@ -4,6 +4,7 @@ namespace common\models;
 
 use Yii;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "{{%article_attachment}}".
@@ -16,10 +17,11 @@ use yii\behaviors\TimestampBehavior;
  * @property string $name
  * @property string $type
  * @property string $size
+ * @property integer $order
  *
  * @property Article $article
  */
-class ArticleAttachment extends \yii\db\ActiveRecord
+class ArticleAttachment extends ActiveRecord
 {
     /**
      * @inheritdoc
@@ -49,7 +51,7 @@ class ArticleAttachment extends \yii\db\ActiveRecord
     {
         return [
             [['article_id', 'path'], 'required'],
-            [['article_id', 'size'], 'integer'],
+            [['article_id', 'size', 'order'], 'integer'],
             [['base_url', 'path', 'type', 'name'], 'string', 'max' => 255]
         ];
     }
@@ -65,6 +67,7 @@ class ArticleAttachment extends \yii\db\ActiveRecord
             'base_url' => Yii::t('common', 'Base Url'),
             'path' => Yii::t('common', 'Path'),
             'size' => Yii::t('common', 'Size'),
+            'order' => Yii::t('common', 'Order'),
             'type' => Yii::t('common', 'Type'),
             'name' => Yii::t('common', 'Name')
         ];
@@ -80,6 +83,6 @@ class ArticleAttachment extends \yii\db\ActiveRecord
 
     public function getUrl()
     {
-        return $this->base_url .'/'. $this->path;
+        return $this->base_url . '/' . $this->path;
     }
 }

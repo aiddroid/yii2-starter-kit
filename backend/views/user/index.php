@@ -1,5 +1,6 @@
 <?php
 
+use common\grid\EnumColumn;
 use common\models\User;
 use yii\helpers\Html;
 use yii\grid\GridView;
@@ -29,10 +30,10 @@ $this->params['breadcrumbs'][] = $this->title;
             'username',
             'email:email',
             [
-                'class' => \common\grid\EnumColumn::className(),
+                'class' => EnumColumn::className(),
                 'attribute' => 'status',
-                'enum' => User::getStatuses(),
-                'filter' => User::getStatuses()
+                'enum' => User::statuses(),
+                'filter' => User::statuses()
             ],
             'created_at:datetime',
             'logged_at:datetime',

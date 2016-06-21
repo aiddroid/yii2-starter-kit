@@ -6,6 +6,7 @@ use common\models\query\ArticleCategoryQuery;
 use Yii;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "article_category".
@@ -16,8 +17,9 @@ use yii\behaviors\TimestampBehavior;
  * @property integer $status
  *
  * @property Article[] $articles
+ * @property ArticleCategory $parent
  */
-class ArticleCategory extends \yii\db\ActiveRecord
+class ArticleCategory extends ActiveRecord
 {
     const STATUS_ACTIVE = 1;
     const STATUS_DRAFT = 0;
@@ -43,8 +45,9 @@ class ArticleCategory extends \yii\db\ActiveRecord
         return [
             TimestampBehavior::className(),
             [
-                'class'=>SluggableBehavior::className(),
-                'attribute'=>'title'
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'title',
+                'immutable' => true
             ]
         ];
     }
@@ -60,7 +63,8 @@ class ArticleCategory extends \yii\db\ActiveRecord
             [['title'], 'string', 'max' => 512],
             [['slug'], 'unique'],
             [['slug'], 'string', 'max' => 1024],
-            ['status', 'integer']
+            ['status', 'integer'],
+            ['parent_id', 'exist', 'targetClass' => ArticleCategory::className(), 'targetAttribute' => 'id']
         ];
     }
 
@@ -84,5 +88,13 @@ class ArticleCategory extends \yii\db\ActiveRecord
     public function getArticles()
     {
         return $this->hasMany(Article::className(), ['category_id' => 'id']);
+    }
+
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getParent()
+    {
+        return $this->hasMany(ArticleCategory::className(), ['id' => 'parent_id']);
     }
 }

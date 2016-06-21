@@ -1,10 +1,11 @@
 # Env
 /.env
-/nginx.conf
+/vhost.conf
 
 # composer
 /vendor
 composer.phar
+## remove in production!
 composer.lock
 
 # IDE

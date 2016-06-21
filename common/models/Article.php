@@ -8,6 +8,7 @@ use Yii;
 use yii\behaviors\BlameableBehavior;
 use yii\behaviors\SluggableBehavior;
 use yii\behaviors\TimestampBehavior;
+use yii\db\ActiveRecord;
 
 /**
  * This is the model class for table "article".
@@ -16,6 +17,7 @@ use yii\behaviors\TimestampBehavior;
  * @property string $slug
  * @property string $title
  * @property string $body
+ * @property string $view
  * @property string $thumbnail_base_url
  * @property string $thumbnail_path
  * @property array $attachments
@@ -32,7 +34,7 @@ use yii\behaviors\TimestampBehavior;
  * @property ArticleCategory $category
  * @property ArticleAttachment[] $articleAttachments
  */
-class Article extends \yii\db\ActiveRecord
+class Article extends ActiveRecord
 {
     const STATUS_PUBLISHED = 1;
     const STATUS_DRAFT = 0;
@@ -71,14 +73,14 @@ class Article extends \yii\db\ActiveRecord
         return [
             TimestampBehavior::className(),
             [
-                'class'=>BlameableBehavior::className(),
+                'class' => BlameableBehavior::className(),
                 'createdByAttribute' => 'author_id',
                 'updatedByAttribute' => 'updater_id',
 
             ],
             [
-                'class'=>SluggableBehavior::className(),
-                'attribute'=>'title',
+                'class' => SluggableBehavior::className(),
+                'attribute' => 'title',
                 'immutable' => true
             ],
             [
@@ -88,6 +90,7 @@ class Article extends \yii\db\ActiveRecord
                 'uploadRelation' => 'articleAttachments',
                 'pathAttribute' => 'path',
                 'baseUrlAttribute' => 'base_url',
+                'orderAttribute' => 'order',
                 'typeAttribute' => 'type',
                 'sizeAttribute' => 'size',
                 'nameAttribute' => 'name',
@@ -107,15 +110,18 @@ class Article extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['title', 'body'], 'required'],
+            [['title', 'body', 'category_id'], 'required'],
             [['slug'], 'unique'],
             [['body'], 'string'],
-            [['published_at'], 'default', 'value' => time()],
-            [['published_at'], 'filter', 'filter' => 'strtotime'],
-            [['category_id'], 'exist', 'targetClass' => ArticleCategory::className(), 'targetAttribute'=>'id'],
+            [['published_at'], 'default', 'value' => function () {
+                return date(DATE_ISO8601);
+            }],
+            [['published_at'], 'filter', 'filter' => 'strtotime', 'skipOnEmpty' => true],
+            [['category_id'], 'exist', 'targetClass' => ArticleCategory::className(), 'targetAttribute' => 'id'],
             [['author_id', 'updater_id', 'status'], 'integer'],
             [['slug', 'thumbnail_base_url', 'thumbnail_path'], 'string', 'max' => 1024],
             [['title'], 'string', 'max' => 512],
+            [['view'], 'string', 'max' => 255],
             [['attachments', 'thumbnail'], 'safe']
         ];
     }
@@ -130,6 +136,7 @@ class Article extends \yii\db\ActiveRecord
             'slug' => Yii::t('common', 'Slug'),
             'title' => Yii::t('common', 'Title'),
             'body' => Yii::t('common', 'Body'),
+            'view' => Yii::t('common', 'Article View'),
             'thumbnail' => Yii::t('common', 'Thumbnail'),
             'author_id' => Yii::t('common', 'Author'),
             'updater_id' => Yii::t('common', 'Updater'),

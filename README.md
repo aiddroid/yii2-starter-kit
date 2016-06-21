@@ -4,7 +4,9 @@
 
 [![Packagist](https://img.shields.io/packagist/v/trntv/yii2-starter-kit.svg)](https://packagist.org/packages/trntv/yii2-starter-kit)
 [![Packagist](https://img.shields.io/packagist/dt/trntv/yii2-starter-kit.svg)](https://packagist.org/packages/trntv/yii2-starter-kit)
-[![PayPayl donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X7UFA3F3ALPM8 "Donate once-off to this project using Paypal")
+[![PayPal donate button](https://img.shields.io/badge/paypal-donate-yellow.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X7UFA3F3ALPM8 "Donate once-off to this project using Paypal")
+[![Dependency Status](https://www.versioneye.com/php/trntv:yii2-starter-kit/badge.svg)](https://www.versioneye.com/php/trntv:yii2-starter-kit)
+[![Build Status](https://travis-ci.org/trntv/yii2-starter-kit.svg?branch=master)](https://travis-ci.org/trntv/yii2-starter-kit)
 
 <!-- /BADGES -->
 
@@ -14,50 +16,27 @@ It was created and developing as a fast start for building an advanced sites bas
 
 It covers typical use cases for a new project and will help you not to waste your time doing the same work in every project
 
+## Before you start
+Please, consider helping project via [contributions](https://github.com/trntv/yii2-starter-kit/issues) or [donations](#donations). 
+
 ## TABLE OF CONTENTS
-- [Features](#features)
 - [Demo](#demo)
-- [Installation](#installation)
+- [Features](#features)
+- [Installation](docs/installation.md)
+    - [Manual installation](docs/installation.md#manual-installation)
+    - [Docker installation](docs/installation.md#docker-installation)
+    - [Vagrant installation](docs/installation.md#vagrant-installation)
 - [Application components](#application-components)
-- [Updates](#updates)
+- [Console commands](docs/console.md)
+- [Testing](docs/testing.md)
+- [FAQ](docs/faq.md)
 - [How to contribute?](#how-to-contribute)
+- [Donations](#donations)
 - [Have any questions](#have-any-questions)
- 
-## FEATURES
-- Beautiful and open source dashboard theme for backend [AdminLTE 2](http://almsaeedstudio.com/AdminLTE)
-- Translations: English, Spanish, Russian, Ukrainian
-- Translations Editor
-- Language change action + behavior to choose locale based on browser preferred language 
-- Sign in, Sign up, profile(avatar, locale, personal data) etc
-- OAuth authorization
-- User management
-- RBAC with predefined `guest`, `user`, `manager` and `administrator` roles
-- Content management components: articles, categories, static pages, editable menu, editable carousels, text blocks
-- Key-value storage component
-- Application settings form (based on KeyStorage component)
-- Ready-to-go RESTful API module
-- [File storage component + file upload widget](https://github.com/trntv/yii2-file-kit)
-- On-demand thumbnail creation [trntv/yii2-glide](https://github.com/trntv/yii2-glide)
-- Useful behaviors (GlobalAccessBehavior, CacheInvalidateBehavior, MaintenanceBehavior)
-- Yii2 log web interface
-- Application timeline component
-- Cache web controller
-- Maintenance mode component ([more](#maintenance-mode))
-- System information web interface
-- dotenv support
-- `ExtendedMessageController` with ability to replace source code language and migrate messages between message sources
-- [Aceeditor widget](https://github.com/trntv/yii2-aceeditor)
-- [Datetimepicker widget](https://github.com/trntv/yii2-bootstrap-datetimepicker), 
-- [Imperavi Reactor Widget](https://github.com/asofter/yii2-imperavi-redactor), 
-- [Elfinder Extension](https://github.com/MihailDev/yii2-elfinder)
-- [Xhprof Debug panel](https://github.com/trntv/yii2-debug-xhprof)
-- Extended IDE autocompletion
-- Nginx config example
-- Test-ready
-- Vagrant support
-- many other features i'm lazy to write about :-)
 
 ##DEMO
+Demo is hosted by awesome [Digital Ocean](https://m.do.co/c/d7f000191ea8)
+
 Frontend:
 http://yii2-starter-kit.terentev.net
 
@@ -82,117 +61,45 @@ Login: user
 Password: user
 ```
 
-##REQUIREMENTS
-The minimum requirement by this application template that your Web server supports PHP 5.4.0.
+## FEATURES
+- Beautiful and open source dashboard theme for backend [AdminLTE 2](http://almsaeedstudio.com/AdminLTE)
+- Translations: English, Spanish, Russian, Ukrainian, Chinese
+- Translations Editor
+- Language change action + behavior to choose locale based on browser preferred language 
+- Sign in, Sign up, profile(avatar, locale, personal data), email activation etc
+- OAuth authorization
+- User management
+- RBAC with predefined `guest`, `user`, `manager` and `administrator` roles
+- RBAC migrations support
+- Content management components: articles, categories, static pages, editable menu, editable carousels, text blocks
+- Key-value storage component
+- Application settings form (based on KeyStorage component)
+- Ready-to-go RESTful API module
+- [File storage component + file upload widget](https://github.com/trntv/yii2-file-kit)
+- On-demand thumbnail creation [trntv/yii2-glide](https://github.com/trntv/yii2-glide)
+- Command Bus with queued and async tasks support [trntv/yii2-command-bus](https://github.com/trntv/yii2-command-bus)
+- Useful behaviors (GlobalAccessBehavior, CacheInvalidateBehavior, MaintenanceBehavior)
+- Yii2 log web interface
+- Application timeline component
+- Cache web controller
+- Maintenance mode component ([more](#maintenance-mode))
+- System information web interface
+- dotenv support
+- `ExtendedMessageController` with ability to replace source code language and migrate messages between message sources
+- [Aceeditor widget](https://github.com/trntv/yii2-aceeditor)
+- [Datetimepicker widget](https://github.com/trntv/yii2-bootstrap-datetimepicker), 
+- [Imperavi Reactor Widget](https://github.com/asofter/yii2-imperavi-redactor), 
+- [Elfinder Extension](https://github.com/MihailDev/yii2-elfinder)
+- [Xhprof Debug panel](https://github.com/trntv/yii2-debug-xhprof)
+- Extended IDE autocompletion
+- Nginx config example
+- Test-ready
+- Docker support and Vagrant support
+- Built-in [mailcatcher](http://mailcatcher.me/)
+- Assets compression and concatenation
+- [Some useful shortcuts](https://github.com/trntv/yii2-starter-kit/blob/master/common/helpers.php)
+- many other features i'm lazy to write about :-)
 
-
-##INSTALLATION
-### Before installation
-If you do not have [Composer](http://getcomposer.org/), you may install it by following the instructions
-at [getcomposer.org](http://getcomposer.org/doc/00-intro.md#installation-nix).
-
-Install composer-asset-plugin needed for yii assets management
-```bash
-composer global require "fxp/composer-asset-plugin"
-```
-
-### Install via Composer
-
-You can install this application template with `composer` using the following command:
-
-```
-composer create-project --prefer-dist --stability=dev trntv/yii2-starter-kit
-```
-
-### Manually installation
-Download the github archive file or clone this repository:
-```bash
-git clone https://github.com/trntv/yii2-starter-kit.git
-```
-
-Run:
-```
-composer install
-```
-
-Application configuration process include:
-
-1. [Initialise application](#1-initialization)
-2. [Web server configuration](#2-web-server-configuration)
-3. [Configure environment](#3-setup-environment)
-4. [Apply migrations](#4-apply-migrations)
-5. [Initialise RBAC](#5-initialise-rbac-config)
-
-### Vagrant
-If you want, you can use bundled Vagrant instead of installing app to your local machine.
-
-1. Install [Vagrant](https://www.vagrantup.com/)
-2. Rename `vagrant.dist.yaml` to `vagrant.yaml`
-3. Create GitHub [personal API token](https://github.com/blog/1509-personal-api-tokens) and paste in into `vagrant.yml`
-4. Run:
-```
-vagrant plugin install vagrant-hostmanager
-vagrant up
-```
-That`s all. After provision application will be accessible on http://yii2-starter-kit.dev
-
-#### 1. Initialization
-Initialise application
-```
-./init #init.bat for windows
-```
-
-#### 2. Web server configuration 
-
-You should configure web server with three different web roots:
-
-`yii2-starter-kit.dev` => `/path/to/yii2-starter-kit/frontend/web`
-
-`backend.yii2-starter-kit.dev` => `/path/to/yii2-starter-kit/backend/web`
-
-`storage.yii2-starter-kit.dev` => `/path/to/yii2-starter-kit/storage/web`
-
-**NOTE:** You can use `nginx.conf` file that is located in the project root.
-
-#### 3. Setup environment
-Adjust settings in `.env` file
-
-##### 3.1 Database
-Edit the file `.env` with your data:
-```
-DB_DSN           = mysql:host=127.0.0.1;port=3306;dbname=yii2-starter-kit
-DB_USERNAME      = user
-DB_PASSWORD      = password
-```
-**NOTE:** Yii won't create the database for you, this has to be done manually before you can access it.
-
-
-##### 3.2 Application urls
-Set your current application urls in `.env`
-
-```php
-FRONTEND_URL    = http://yii2-starter-kit.dev
-BACKEND_URL     = http://backend.yii2-starter-kit.dev
-STORAGE_URL     = http://storage.yii2-starter-kit.dev
-```
-#### 4. Apply migrations
-
-```php
-php console/yii migrate
-```
-
-#### 5. Initialise RBAC config
-
-```php
-php console/yii rbac/init
-```
-**IMPORTANT: without rbac/init you CAN'T LOG IN into backend**
-
-### Demo user
-```
-Login: webmaster
-Password: webmaster
-```
 
 # Application Components
 
@@ -216,18 +123,6 @@ Yii::$app->keyStorage->set('articles-per-page', 20);
 Yii::$app->keyStorage->get('articles-per-page'); // 20
 ```
 
-### ExtendedMessageController
-This controller extends default MessageController to provide some useful actions
-
-Migrate messages between different message sources:
-``yii message/migrate @common/config/messages/php.php @common/config/messages/db.php``
-
-Replace source code language:
-``yii message/replace-source-language @path language-LOCALE``
-
-Remove Yii::t from code
-``yii message/replace-source-language @path``
-
 ### Maintenance mode
 Starter kit has built-in component to provide a maintenance functionality. All you have to do is to configure ``maintenance``
 component in your config
@@ -247,6 +142,30 @@ This component will catch all incoming requests, set proper response HTTP header
 Additional configuration options can be found in a corresponding class.
 
 Starter kit configured to turn on maintenance mode if ``frontend.maintenance`` key in KeyStorage is set to ``true``
+
+### Command Bus
+- [What is command bus?](http://shawnmc.cool/command-bus)
+
+In Starter Kit Command Bus pattern is implemented with [tactician](https://github.com/thephpleague/tactician) package and 
+it's yii2 connector - [yii2-tactician](https://github.com/trntv/yii2-tactician)
+
+Command are stored in ``common/commands/command`` directory, handlers in ``common/commands/handler``
+
+To execute command run
+```php
+$sendEmailCommand = new SendEmailCommand(['to' => 'user@example.org', 'body' => 'Hello User!']);
+Yii::$app->commandBus->handle($sendEmailCommand);
+```
+
+### Timeline (Activity)
+```php
+$addToTimelineCommand = new AddToTimelineCommand([
+    'category' => 'user', 
+    'event' => 'signup', 
+    'data' => ['foo' => 'bar']
+]);
+Yii::$app->commandBus->handle($addToTimelineCommand);
+```
 
 ### Behaviors
 #### CacheInvalidateBehavior
@@ -305,6 +224,9 @@ Add in your application config:
 ```
 It will allow access to you application only for authentificated users. 
 
+### Command Bus
+Read more about command bus on in [official repository](https://github.com/trntv/yii2-command-bus#yii2-command-bus)
+
 ### Widgets configurable from backend
 #### Carousel
 1. Create carousel in backend
@@ -345,8 +267,8 @@ It will allow access to you application only for authentificated users.
  ]
 ```
 ### API
-Starter Kit has fully configured and ready-to-go REST API module. You can access it on
-http://yii2-starter-kit.dev/api/v1
+Starter Kit has fully configured and ready-to-go REST API module. You can access it on http://yii2-starter-kit.dev/api/v1
+For some endpoints you should authenticate your requests with one of available methods - https://github.com/yiisoft/yii2/blob/master/docs/guide/rest-authentication.md#authentication
 
 ### MultiModel
 ``common\base\MultiModel`` - class for handling multiple models in one
@@ -371,28 +293,40 @@ In view:
 ```
 ### Other
 - ``common\behaviors\GlobalAccessBehavior`` - allows to set access rules for your application in application config
-- ``common\behaviors\LocaleBehavior`` - discover user locale from browser or account settings and set it
-- ``common\behaviors\LoginTimestampBehavior`` - logs user login time
-- ``common\validators\JsonValidator`` - validates a value to be a valid json
-- ``common\rbac\OwnModelRule`` - simple rule for RBAC to check if the currenденt user is model owner
 
-##Updates
-Add remote repository `upstream`.
+- ``common\behaviors\LocaleBehavior`` - discover user locale from browser or account settings and set it
+
+- ``common\behaviors\LoginTimestampBehavior`` - logs user login time
+
+- ``common\validators\JsonValidator`` - validates a value to be a valid json
+
+- ``common\rbac\rule\OwnModelRule`` - simple rule for RBAC to check if the current user is model owner
+```php
+Yii::$app->user->can('editOwnModel', ['model' => $model]);
 ```
-git remote add upstream https://github.com/trntv/yii2-starter-kit.git
+
+- ``common\filters\OwnModelAccessFilter`` - action filter to check if user is allowed to manage this model
+```php
+public function behaviors()
+    {
+        return [
+            'modelAccess' => [
+                'class' => OwnModelAccessFilter::className(),
+                'only' => ['view', 'update', 'delete'],
+                'modelClass' => Article::className()
+            ],
+        ];
+    }
 ```
-Fetch latest changes from it
-```
-git fetch upstream
-```
-Merge these changes into your repository
-```
-git merge upstream/master
-```
-**IMPORTANT: there might be a conflicts between `upstream` and your code. You should resolve conflicts on your own**
 
 ##How to contribute?
 You can contribute in any way you want. Any help appreciated, but most of all i need help with docs (^_^)
+
+##Donations
+- [Paypal] (https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=X7UFA3F3ALPM8)
+- [Bitcoin] (https://www.coinbase.com/checkouts/2f1c1cb31c395e5aaafa1ba70003552e)
+- [WebMoney] (Z110052695454)
+- Other way: [eugene@terentev.net](mailto:eugene@terentev.net)
 
 ##Have any questions?
 mail to [eugene@terentev.net](mailto:eugene@terentev.net)
@@ -405,3 +339,4 @@ https://github.com/yiisoft/yii2/tree/master/docs
 This template was created mostly for developers NOT for end users.
 This is a point where you can begin your application, rather than creating it from scratch.
 Good luck!
+

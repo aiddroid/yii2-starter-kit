@@ -1,9 +1,62 @@
 Yii Starter Kit Change Log
 ==========================
 
-next
-----
+dev-master
+----------
+
+2.2.1
+-----
+- Fixed #407: Vagrant provisioning problems 
+- Fixed #400: Application initialization bug
+- Added some sanitizing in ContactForm (#339)
+- env() helper function added
+- trntv/yii2-glide and trntv/yii2-command-bus versions updated
+- Testing improvements
+- PHP7 is now default for Vagrant
+- Models are reformatted consistently as per conventions. #365
+- Spanish translations was updated
+- Fixed #392: The destinator of the mail was missing
+- Maintenance mode works equally on all environments (#348)
+
+2.2.0
+-----
+- Dockerfile based on PHP7
+- Travis CI integration
+
+2.1.3
+-----
+- Ads placing example
+- DbText widget changes
+- Fixed #368: User form fixes
+- Fixed #369: missing field from user table in application tests
+
+2.1.2
+-----
+- Fixed: Invalid user status validation
+- Fixed #363: Remove references to password_reset_token
+
+2.1.1
+-----
+- Mailcathcer support
+- Optional user email activation
+
+2.1.0
+-----
+- Enh #354: Command Bus implemented with yii2-command-bus extension
+- Enh #321: editOwnModel permission
+- Fixed #326
+- API Fixes
+- Fixed: password_confirm not validated
+- Enh: Shortcuts file added
+- Enh: Assets compression support
+- Enh #192: Docker support
+- Enh #223: Migrations for RBAC
+- Enh #189: Added command bus
+- Changed application setup proccess 
+- Enh #184: Preserve article attachments file name
+- Enh #176: Added ability to set custom view for static pages and articles
 - Enh #160: LocaleBehavior::enablePreferredLanguage
+- fixes and improvements
 
 2.0.0 
 -----
@@ -48,6 +101,7 @@ next
 - Enh: FileCache now uses same path for all applications
 - Enh: common\components\behaviors\CacheInvalidateBehavior
 - ... Fixes ...
+- Added ability to configure timezone and name of vagrant box
 
 1.4.1
 -----

@@ -17,7 +17,19 @@ $config = [
         ],
         
         'cache' => [
-            'class' => 'yii\caching\DummyCache',
+            'class' => 'yii\caching\FileCache',
+            'cachePath' => '@common/runtime/cache'
+        ],
+
+        'commandBus' => [
+            'class' => 'trntv\bus\CommandBus',
+            'middlewares' => [
+                [
+                    'class' => '\trntv\bus\middlewares\BackgroundCommandMiddleware',
+                    'backgroundHandlerPath' => '@console/yii',
+                    'backgroundHandlerRoute' => 'command-bus/handle',
+                ]
+            ]
         ],
         
         'mcache' => [
@@ -47,25 +59,25 @@ $config = [
             'sourcePath' => '@storage/web/source',
             'cachePath' => '@storage/cache',
             'urlManager' => 'urlManagerStorage',
-            'maxImageSize' => getenv('GLIDE_MAX_IMAGE_SIZE'),
-            'signKey' => getenv('GLIDE_SIGN_KEY')
+            'maxImageSize' => env('GLIDE_MAX_IMAGE_SIZE'),
+            'signKey' => env('GLIDE_SIGN_KEY')
         ],
 
         'mailer' => [
             'class' => 'yii\swiftmailer\Mailer',
-            'useFileTransport' => YII_ENV_DEV,
+            //'useFileTransport' => true,
             'messageConfig' => [
                 'charset' => 'UTF-8',
-                'from' => getenv('ADMIN_EMAIL')
+                'from' => env('ADMIN_EMAIL')
             ]
         ],
 
         'db'=>[
             'class'=>'yii\db\Connection',
-            'dsn' => getenv('DB_DSN'),
-            'username' => getenv('DB_USERNAME'),
-            'password' => getenv('DB_PASSWORD'),
-            'tablePrefix' => getenv('DB_TABLE_PREFIX'),
+            'dsn' => env('DB_DSN'),
+            'username' => env('DB_USERNAME'),
+            'password' => env('DB_PASSWORD'),
+            'tablePrefix' => env('DB_TABLE_PREFIX'),
             'charset' => 'utf8',
             'enableSchemaCache' => YII_ENV_PROD,
         ],
@@ -100,7 +112,8 @@ $config = [
                         'common'=>'common.php',
                         'backend'=>'backend.php',
                         'frontend'=>'frontend.php',
-                    ]
+                    ],
+                    'on missingTranslation' => ['\backend\modules\i18n\Module', 'missingTranslation']
                 ],
                 /* Uncomment this code to use DbMessageSource
                  '*'=> [
@@ -108,10 +121,10 @@ $config = [
                     'sourceMessageTable'=>'{{%i18n_source_message}}',
                     'messageTable'=>'{{%i18n_message}}',
                     'enableCaching' => YII_ENV_DEV,
-                    'cachingDuration' => 3600
+                    'cachingDuration' => 3600,
+                    'on missingTranslation' => ['\backend\modules\i18n\Module', 'missingTranslation']
                 ],
                 */
-
             ],
         ],
 
@@ -140,7 +153,7 @@ $config = [
         ),
         'urlManagerFrontend' => \yii\helpers\ArrayHelper::merge(
             [
-                'hostInfo'=>Yii::getAlias('@frontendUrl')
+                'hostInfo' => Yii::getAlias('@frontendUrl')
             ],
             require(Yii::getAlias('@frontend/config/_urlManager.php'))
         ),
@@ -159,29 +172,24 @@ $config = [
         ]
     ],
     'params' => [
-        'adminEmail' => getenv('ADMIN_EMAIL'),
-        'robotEmail' => getenv('ROBOT_EMAIL'),
+        'adminEmail' => env('ADMIN_EMAIL'),
+        'robotEmail' => env('ROBOT_EMAIL'),
         'availableLocales'=>[
             'en-US'=>'English (US)',
             'ru-RU'=>'Русский (РФ)',
             'uk-UA'=>'Українська (Україна)',
             'es' => 'Español',
-            'zh-CN' => '中文'
+            'zh-CN' => '简体中文',
         ],
     ],
 ];
 
 if (YII_ENV_PROD) {
-    $config['components']['cache'] = [
-        'class' => 'yii\caching\FileCache',
-        'cachePath' => '@common/runtime/cache'
-    ];
-
     $config['components']['log']['targets']['email'] = [
         'class' => 'yii\log\EmailTarget',
         'except' => ['yii\web\HttpException:*'],
         'levels' => ['error', 'warning'],
-        'message' => ['from' => getenv('ROBOT_EMAIL'), 'to' => getenv('ADMIN_EMAIL')]
+        'message' => ['from' => env('ROBOT_EMAIL'), 'to' => env('ADMIN_EMAIL')]
     ];
 }
 
@@ -189,6 +197,15 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class'=>'yii\gii\Module'
+    ];
+
+    $config['components']['cache'] = [
+        'class' => 'yii\caching\DummyCache'
+    ];
+    $config['components']['mailer']['transport'] = [
+        'class' => 'Swift_SmtpTransport',
+        'host' => env('SMTP_HOST'),
+        'port' => env('SMTP_PORT'),
     ];
 }
 
