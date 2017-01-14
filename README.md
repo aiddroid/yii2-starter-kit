@@ -63,7 +63,7 @@ Password: user
 
 ## FEATURES
 - Beautiful and open source dashboard theme for backend [AdminLTE 2](http://almsaeedstudio.com/AdminLTE)
-- Translations: English, Spanish, Russian, Ukrainian, Chinese
+- Translations: English, Spanish, Russian, Ukrainian, Chinese, Vietnamese
 - Translations Editor
 - Language change action + behavior to choose locale based on browser preferred language 
 - Sign in, Sign up, profile(avatar, locale, personal data), email activation etc
@@ -313,6 +313,7 @@ public function behaviors()
             'modelAccess' => [
                 'class' => OwnModelAccessFilter::className(),
                 'only' => ['view', 'update', 'delete'],
+                'modelCreatedByAttribute' => 'created_by',
                 'modelClass' => Article::className()
             ],
         ];
